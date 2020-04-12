@@ -4,12 +4,13 @@ const ADD_ANSWER = 'ADD_ANSWER',
     CURRENT_ANSWER = 'CURRENT_ANSWER',
     EDIT_ANSWER = 'EDIT_ANSWER',
     RESET_CURRENT_ANSWER = 'RESET_CURRENT_ANSWER',
-    FETCH_DONE_TASKS = 'FETCH_DONE_TASKS'
+    FETCH_DONE_TASKS = 'FETCH_DONE_TASKS',
+    SET_DONE_TASKS = 'SET_DONE_TASKS:'
 
 
 const initialState = {
-    usersDay: [],
-    userTodayTasks: [],
+    usersAnswers: [],
+    // userTodayTasks: [],
     currentAnswer: {}
 }
 
@@ -18,7 +19,8 @@ const answerReducer = (state = initialState, action) => {
     switch (action.type) {
         case ADD_ANSWER:
             return {
-                usersDay: [...state.usersDay, {
+                ...state,
+                usersAnswers: [...state.usersAnswers, {
                     date: state.currentAnswer.date,
                     text: state.currentAnswer.text,
                     title: state.currentAnswer.title,
@@ -28,14 +30,16 @@ const answerReducer = (state = initialState, action) => {
                 }]
 
             }
-        case EVERYDAY_TASK:
-            return {
-                userTodayTasks: [...state.userTodayTasks, action.payload]
-            }
-        case ADD_TASK:
-            return {
-                userTodayTasks: [...state.userTodayTasks, action.payload]
-            }
+        // case EVERYDAY_TASK:
+        //     return {
+        //         ...state,
+        //         userTodayTasks: [...state.userTodayTasks, action.payload]
+        //     }
+        // case ADD_TASK:
+        //     return {
+        //         ...state,
+        //         userTodayTasks: [...state.userTodayTasks, action.payload]
+        //     }
         case CURRENT_ANSWER:
             return {
                 ...state,
@@ -47,19 +51,32 @@ const answerReducer = (state = initialState, action) => {
                 currentAnswer: {}
             }
         case EDIT_ANSWER:
-            const newAnswers = { ...state.usersDay }
+            const newAnswers = { ...state.usersAnswers }
             newAnswers[state.currentAnswer.currentIndex].text = state.currentAnswer.text
             return {
                 ...state,
-                usersDay: newAnswers
+                usersAnswers: newAnswers
             }
         case FETCH_DONE_TASKS:
             return {
                 ...state,
                 currentAnswer: {}
             }
+        case SET_DONE_TASKS:
+            return {
+                ...state,
+                usersAnswers: action.payload
+            }
         default:
             return state
+    }
+}
+
+
+export const setDoneTasks = payload => {
+    return {
+        type: SET_DONE_TASKS,
+        payload
     }
 }
 

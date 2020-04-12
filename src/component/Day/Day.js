@@ -1,11 +1,8 @@
 import React from 'react';
 import Task from './Task';
-import { questionTypes, questionTypesIdArray } from './../../Data/questionType'
 import { connect } from 'react-redux'
 import { today } from './../../Data/dates'
-import { userTodayTasks } from '../../Data/tasksToDo';
-import { NavLink } from "react-router-dom";
-import { render } from '@testing-library/react';
+// import { render } from '@testing-library/react';
 import { resetCurrentAnswer } from './../../Redux/Reducers/AnswerReducer'
 import { fetchDayTasks } from './../../Redux/Actions'
 
@@ -18,33 +15,10 @@ class Day extends React.Component {
 
     componentDidMount() {
         this.props.resetCurrentAnswer()
-        this.props.fetchDayTasks('11-3-2020')
+        this.props.fetchDayTasks(today)
     }
     
     render() {
-
-        // console.log('render')
-        // const usersQuestions = this.props.usersQuestions.map(item => {
-        //     let i = questionTypesIdArray.indexOf(item, 0)
-        //     return {
-        //         id: item,
-        //         title: questionTypes[i].title,
-        //         description: questionTypes[i].description
-        //     }
-        // })
-    
-        // const usersAnswers = this.props.usersAnswers
-    
-        // const userTaskDone = []
-        // const userTaskDoneArr = []
-        // for (let key in usersAnswers) {
-        //     userTaskDone.push({ id: usersAnswers[key].type, title: usersAnswers[key].title })
-        //     userTaskDoneArr.push(usersAnswers[key].type)
-        // }
-    
-        // const userTaskToDo = usersQuestions.filter(item => !userTaskDoneArr.includes(item.id))
-
-
 
         return (
             <>
@@ -67,7 +41,7 @@ class Day extends React.Component {
                         this.props.usersTaskToDo.map(item => <Task
                             name={item.title}
                             key={item.id}
-                            id={item.id}
+                            id={item.type}
                             date={today}
                             done={false}
                             description={item.description}
@@ -75,19 +49,20 @@ class Day extends React.Component {
                     }
                 </div>
              
-                {/* <div>
+                <div>
                     {
-                        userTaskDone.map(item => <Task
+                        this.props.usersAnswers.map(item => <Task
                             name={item.title}
                             key={item.id}
-                            id={item.id}
+                            id={item.type}
                             date={today}
                             done={true}
                             description={item.description}
+                            length={item.length}
                             add={() => this.props.addQuestion(item.id)} />)
                     }
                 </div>
-     */}
+    
             </>
         )
     }
@@ -98,7 +73,7 @@ class Day extends React.Component {
 const mapStateToProps = state => {
     return {
         usersQuestions: state.questions.usersQuestions,
-        usersAnswers: state.answers.usersDay,
+        usersAnswers: state.answers.usersAnswers,
         userToday: state.answers.userTodayTasks,
         usersTaskToDo: state.questions.usersTaskToDo
     }

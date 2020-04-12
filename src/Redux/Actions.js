@@ -1,5 +1,7 @@
 import Axios from 'axios'
 import { addQuestion, removeQuestion, doneTask, loadingOff, loadingOn, fetchAllQuestions, fetchUserQuestions, actionFetchQuestions, fetchTasks } from './Reducers/QuestionReducer'
+import { today } from './../Data/dates'
+import { setDoneTasks } from './Reducers/AnswerReducer';
 
 Axios.defaults.baseURL = 'https://free-ad202.firebaseio.com/';
 
@@ -81,13 +83,13 @@ export function fetchRemoveQuestion(item, array) {
     }
 }
 
-export function fetchAddAnswer(data) {
+export function fetchAddAnswer(date, type, data) {
     return dispatch => {
 
         console.log('fetch')
 
         try {
-            Axios.post('users/kirill/answers.json', data)
+            Axios.put('users/kirill/answers/' + date + '/' + type + '.json', data)
 
         } catch (e) {
             console.log(e)
@@ -99,19 +101,26 @@ export function fetchAddAnswer(data) {
 export function fetchDayTasks(date) {
     return async dispatch => {
 
-        try {            
+        try {
+            
             let allQuestions = await Axios.get('questionTypes.json')
             const allQuestionsObj = allQuestions.data
-            allQuestions = Object.values(allQuestions.data)          
-            
-            let answers = await Axios.get('users/kirill/answers.json')
-            answers = Object.values(answers.data)
-            
-            const answersArr = answers.map(item => item.id)
-            console.log('answers', answers, answersArr)
+            allQuestions = Object.values(allQuestions.data)
+
+            let answers = await Axios.get(`users/kirill/answers/${today}.json`)
+
+            let answersArr = []
+            if (answers.data) {
+                answers = Object.values(answers.data)      
+                answersArr = answers.map(item => item.id)          
+            }
+
+            console.log('answers', answersArr)
 
             let myQuestions = await Axios.get('users/kirill/questions.json')
-            myQuestions = Object.values(myQuestions.data) 
+            myQuestions = Object.values(myQuestions.data)
+
+            console.log('my', myQuestions)
 
             myQuestions = myQuestions.map(item => {
                 return {
@@ -128,13 +137,16 @@ export function fetchDayTasks(date) {
                         title: allQuestionsObj[item.type].title,
                         type: item.type
                     })
-                } 
+                }
             })
 
             dispatch(fetchTasks(myTaskToDo))
+            if (answersArr.length > 0) {
+                dispatch(setDoneTasks(answers))
+            }
             
 
-            console.log(myTaskToDo)
+
 
         } catch (error) {
             console.log(error)

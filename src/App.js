@@ -14,9 +14,9 @@ function App() {
       <Menu />
       <div className='wrapper'>
         <Switch>
-          <Route path='/day' render={() => <Day />} />
+          <Route exact path='/tasks/:date' render={() => <Day />} />
           <Route path='/questions' render={() => <Questions />} />
-          <Route path='/tasks/:date/:type' render={() => <Paper />} />
+          <Route exact path='/tasks/:date/:type' render={() => <Paper />} />
 
         </Switch>
       </div>

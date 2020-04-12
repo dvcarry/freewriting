@@ -105,7 +105,7 @@ class Questions extends React.Component {
 
 
                 <div className='heading'>
-                    <h1>Мои активности</h1>
+                    <h1>Мои дневники на каждый день</h1>
                 </div>
 
                 <div>

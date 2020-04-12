@@ -64,15 +64,38 @@ h1 {
 .paper_text textarea {
   width: 100%;
   margin-top: 20px;
+  resize: none;
 }
 
 .question_type {
   border: 1px solid grey;
-  padding: 10px 20px;
+  padding: 10px 35px;
   margin-bottom: 20px;
-  cursor: pointer;
+  display: grid;
+  grid-template-columns: 1fr 100px;
 }
 
+.question_type strong {
+  cursor: pointer;  
+}
+
+.question_type p {
+  color: gray;  
+}
+
+.question_type strong:hover {
+  text-decoration: underline;  
+}
+
+.question_right {
+  display: grid;
+  align-items: center;
+  justify-items: center;
+}
+
+.question_right button:hover {
+  color: red;
+}
 
 
 /*----------------------- Menu ------------------------------ */
@@ -113,7 +136,9 @@ h1 {
 /*----------------------- TASK ------------------------------ */
 
 .task {
-  cursor: pointer;  
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
 }
 
 .card {
@@ -167,3 +192,7 @@ button {
   justify-content: space-between
 }
 
+
+.paper_panel span {
+  color: gray;
+}

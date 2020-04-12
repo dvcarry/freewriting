@@ -8,6 +8,7 @@ const Task = props => {
     return (
         <div className={classes.join(' ')} onClick={() => {props.history.push(`/tasks/${props.date}/${props.id}`)}}>
             <p>{props.name}</p>
+            <span>{props.length}</span>
         </div>
     )
 }

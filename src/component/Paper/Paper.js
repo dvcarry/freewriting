@@ -8,43 +8,24 @@ import { questionTypesIdArray, questionTypes } from './../../Data/questionType'
 import { addAnswer, addCurrentAnswer, editAnswer } from '../../Redux/Reducers/AnswerReducer'
 import { doneTask } from '../../Redux/Reducers/QuestionReducer'
 import { fetchAddAnswer } from './../../Redux/Actions'
+import { today } from './../../Data/dates'
 
 class Paper extends React.Component {
 
-    // state = {
-    //     text: '',
-    //     date: this.props.match.params.date,
-    //     type: this.props.match.params.type,
-    //     title: questionTypes[questionTypesIdArray.indexOf(this.props.match.params.type)].title
-    // }
-
-    // addText = event => {
-    //     this.setState({text: event.target.value})
-
-    // }
-
     clickReady = () => {
-
-        // // console.log(this.state)
-        // const z = this.props.usersTaskToDo.filter(item => item != state.type)
-        // console.log(z)
-        // const nextTask = this.props.usersTaskToDo.length > 0 ? this.props.usersTaskToDo.filter(item => item != this.props.currentAnswer.type)[0] : '' 
-        // debugger
-        // const nextTaskUrl = '/tasks/' + this.props.currentAnswer.date + '/' + nextTask
-        // console.log(nextTask)
 
         
         if (this.props.currentAnswer.status === 'old') {
             this.props.editAnswer()
         } else {            
             
-            this.props.fetchAddAnswer(this.props.currentAnswer)
+            this.props.fetchAddAnswer(this.props.match.params.date, this.props.match.params.type, this.props.currentAnswer)
             this.props.addAnswer()
             this.props.doneTask(this.props.match.params.type)               
         }
 
         
-        this.props.history.push('/day/')     
+        this.props.history.push('/tasks/' + today)     
     }
 
     addCurrent = event => {
@@ -60,7 +41,7 @@ class Paper extends React.Component {
     }
 
     skipQuestion = () => {
-        this.props.history.push('/day/')
+        this.props.history.push('/tasks/' + today)
     }
 
 
@@ -88,30 +69,10 @@ class Paper extends React.Component {
                 status: 'new'
             })
         }
-
-        // current ? console.log('yes') : console.log('no')
-
-        // console.log(current)
-
-        // this.props.addCurrentAnswer({
-        //     date: this.props.match.params.date,
-        //     type: this.props.match.params.type,
-        //     title: questionTypes[questionTypesIdArray.indexOf(this.props.match.params.type)].title,
-        //     text: ''
-        // })
-        // this.addCurrent()
     }
-
-    // componentDidUpdate() {
-    //     this.addCurrent()
-    // }
 
 
     render() {
-
-        // console.log(this.props.answers)
-
-        // debugger
 
         let questionType = this.props.match.params.type
         const questionHeading = questionTypes[questionTypesIdArray.indexOf(questionType)].title
@@ -131,9 +92,7 @@ class Paper extends React.Component {
                     <textarea
                         autoFocus="true"
                         rows='35'
-                        // value={this.state.text} 
-                        // value={this.props.currentAnswer.text}
-                        value={currentAnswer.text}
+                        value={this.props.currentAnswer.text}
                         onChange={this.addCurrent}
                         placeholder='Стоит только начать...'
 
@@ -146,7 +105,7 @@ class Paper extends React.Component {
                         : <button onClick={this.skipQuestion}>Пропустить</button>}
                     </div>
                     <div>
-                        {/* <span>{this.props.currentAnswer.length}</span> */}
+                        <span>{this.props.currentAnswer.length}</span>
                     </div>
                 </div>
             </div>
@@ -155,15 +114,12 @@ class Paper extends React.Component {
     }
 }
 
-
-
 const mapStateToProps = state => {
     return {
-        answers: state.answers.usersDay,
+        answers: state.answers.usersAnswers,
         usersTaskToDo: state.questions.usersTaskToDo,
         currentAnswer: state.answers.currentAnswer
     }
 }
 
 export default connect(mapStateToProps, { addAnswer, doneTask, addCurrentAnswer, editAnswer, fetchAddAnswer })(withRouter(Paper))
-// export default connect()(Paper)
