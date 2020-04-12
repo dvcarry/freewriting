@@ -1,38 +1,169 @@
-.App {
-  text-align: center;
+:root {
+  --card-border: brown;
+  --card-border-radius: 3px;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+
+* {
+	padding: 0;
+	margin: 0;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+*,
+::after,
+::before {
+	box-sizing: inherit;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+html {
+	box-sizing: border-box;
+	font-size: 16px;
+}
+
+body {
+	font-family: 'Neucha', cursive;
+  font-weight: 400;
+  letter-spacing: 1.5px;
+	line-height: 1.6rem;
+  color: black;
+  background: linear-gradient(to left, #E0EAFC, #CFDEF3);
+
+
+}
+
+.wrapper {
+  width: 800px;
+  margin: auto;
+  text-align: left;
+}
+
+h1 {
+  font-size: 36px;
+  line-height: 48px;
+}
+
+.heading {
+  margin-top: 100px;
+  margin-bottom: 20px;
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
 }
 
-.App-link {
-  color: #61dafb;
+
+/*----------------------- PAPER ------------------------------ */
+
+.paper_heading {
+  margin-top: 100px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.paper_text {
+  width: 100%;
 }
+
+.paper_text textarea {
+  width: 100%;
+  margin-top: 20px;
+}
+
+.question_type {
+  border: 1px solid grey;
+  padding: 10px 20px;
+  margin-bottom: 20px;
+  cursor: pointer;
+}
+
+
+
+/*----------------------- Menu ------------------------------ */
+
+.menu {
+  height: 50px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.menu ul {
+  list-style: none;
+}
+
+.menu ul li {
+  display: inline-block;
+  margin-right: 30px;
+}
+
+.menu ul li a {
+  text-decoration: none;
+  color: black;
+}
+
+.menu ul li a:hover {
+  font-weight: 700;
+}
+
+.logo {
+  margin: 0 30px;
+}
+
+
+/*----------------------- TASK ------------------------------ */
+
+.task {
+  cursor: pointer;  
+}
+
+.card {
+  border: 1px solid grey;
+  padding: 10px 20px;
+  margin-bottom: 20px;
+  border-radius: var(--card-border-radius);
+}
+
+.notdone {
+  background-color: white;
+}
+
+.done {
+  background-color: transparent;
+}
+
+/*----------------------- QUESTION ------------------------------ */
+
+hr {
+  margin: 20px 0;
+}
+
+button {
+  cursor: pointer;
+  padding: 5px 10px;
+  /* border: 2px solid rebeccapurple; */
+  border: none;
+  font-size: 16px;
+  background-color: transparent;
+  color: #4760A0;
+  font-family: 'Neucha', cursive;
+  font-weight: 700;
+}
+
+
+/*----------------------- PAPER ------------------------------ */
+
+.paper_text textarea {
+  border: none;
+  outline: none;
+  padding: 15px;
+  border-radius: var(--card-border-radius);
+}
+
+.paper_panel {
+  /* position: fixed; */
+  bottom: 0;
+  height: 50px;
+  display: flex;
+  justify-content: space-between
+}
+
