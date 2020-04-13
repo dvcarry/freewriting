@@ -5,6 +5,8 @@ import { today } from './../../Data/dates'
 // import { render } from '@testing-library/react';
 import { resetCurrentAnswer } from './../../Redux/Reducers/AnswerReducer'
 import { fetchDayTasks } from './../../Redux/Actions'
+import { NavLink } from 'react-router-dom';
+import Loader from '../UI/Loader';
 
 
 
@@ -17,6 +19,8 @@ class Day extends React.Component {
         this.props.resetCurrentAnswer()
         this.props.fetchDayTasks(today)
     }
+
+    
     
     render() {
 
@@ -28,12 +32,17 @@ class Day extends React.Component {
                     <h1>Рукописи на сегодня</h1>
                     <p>{today}</p>
                 </div>
+                
+                {
+                    this.props.isLoading ? <Loader /> : null
+                }
+                {/* <Loader /> */}
     
-                {/* {
-                    usersQuestions.length === 0 
-                    ? <div><p>К великому сожалению, у тебя нет довленных задач.</p> <NavLink to='/questions/'>Добавить</NavLink></div> 
+                {
+                    this.props.usersQuestions.length === 0 && !this.props.isLoading
+                    ? <div><p>К сожалению, у тебя нет добавленных задач.</p> <NavLink to='/questions/'>Добавить</NavLink></div> 
                     : null
-                } */}
+                }
                 
                
                 <div>
@@ -75,7 +84,8 @@ const mapStateToProps = state => {
         usersQuestions: state.questions.usersQuestions,
         usersAnswers: state.answers.usersAnswers,
         userToday: state.answers.userTodayTasks,
-        usersTaskToDo: state.questions.usersTaskToDo
+        usersTaskToDo: state.questions.usersTaskToDo,
+        isLoading: state.questions.isLoading
     }
 }
 

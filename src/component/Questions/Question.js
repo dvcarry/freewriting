@@ -1,4 +1,5 @@
 import React from 'react';
+import { NavLink } from 'react-router-dom';
 
 const QuestionType = props => {
 
@@ -7,11 +8,12 @@ const QuestionType = props => {
     return (
         <div className={classes.join(' ')} >
             <div>
-                <strong>{props.name}</strong>
+                <strong><NavLink to={`/questions/${props.type}`}>{props.title}</NavLink></strong>
+                
                 <p>{props.description}</p>
             </div>
             <div className="question_right">
-                <button onClick={props.click}>{props.type}</button>
+                <button onClick={props.click}>{props.button}</button>
             </div>
 
 

@@ -111,11 +111,12 @@ class Questions extends React.Component {
                 <div>
                     {
                         myRest.map(item => <QuestionType
-                            name={item.title}
+                            title={item.title}
                             key={item.id}
                             done={false}
+                            type={item.id}
                             description={item.desc}
-                            type={'Удалить'}
+                            button={'Удалить'}
                             click={() => this.props.fetchRemoveQuestion(item.id, this.props.usersQuestions)}
                         />)
                     }
@@ -126,11 +127,12 @@ class Questions extends React.Component {
                 <div>
                     {
                         queRest.map(item => <QuestionType
-                            name={item.title}
+                            title={item.title}
                             key={item.id}
+                            type={item.id}
                             done={true}
                             description={item.desc}
-                            type={'Добавить'}
+                            button={'Добавить'}
                             click={() => this.props.fetchAddQuestion(item.id, this.props.usersQuestions)}
                         />)
                     }

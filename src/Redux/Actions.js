@@ -98,11 +98,13 @@ export function fetchAddAnswer(date, type, data) {
     }
 }
 
-export function fetchDayTasks(date) {
+export function fetchDayTasks() {
     return async dispatch => {
 
         try {
             
+            dispatch(loadingOn)
+
             let allQuestions = await Axios.get('questionTypes.json')
             const allQuestionsObj = allQuestions.data
             allQuestions = Object.values(allQuestions.data)
@@ -112,39 +114,48 @@ export function fetchDayTasks(date) {
             let answersArr = []
             if (answers.data) {
                 answers = Object.values(answers.data)      
-                answersArr = answers.map(item => item.id)          
+                // answersArr = answers.map(item => item.id)          
+                answersArr = answers.map(item => item.type)          
             }
 
-            console.log('answers', answersArr)
-
             let myQuestions = await Axios.get('users/kirill/questions.json')
-            myQuestions = Object.values(myQuestions.data)
-
-            console.log('my', myQuestions)
-
-            myQuestions = myQuestions.map(item => {
-                return {
-                    id: `${date} ${item}`,
-                    type: item
-                }
-            })
 
             let myTaskToDo = []
 
-            myQuestions.map(item => {
-                if (!answersArr.includes(item.id)) {
-                    myTaskToDo.push({
-                        title: allQuestionsObj[item.type].title,
-                        type: item.type
-                    })
-                }
-            })
+            if (myQuestions.data) {
+                myQuestions = Object.values(myQuestions.data)                
+
+                myQuestions.map(item => {
+                    if (!answersArr.includes(item)) {
+                        myTaskToDo.push({
+                            title: allQuestionsObj[item].title,
+                            type: item
+                        })
+                    }
+                })
+            }
+            
+
+            // myQuestions = myQuestions.map(item => {
+            //     return {
+            //         id: `${date} ${item}`,
+            //         type: item
+            //     }
+            // })
+
+
+
+            dispatch(loadingOff)
 
             dispatch(fetchTasks(myTaskToDo))
             if (answersArr.length > 0) {
                 dispatch(setDoneTasks(answers))
+            }  
+
+
+            if (myQuestions.length > 0) {
+                dispatch(fetchUserQuestions(myQuestions))
             }
-            
 
 
 

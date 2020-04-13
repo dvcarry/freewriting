@@ -27,13 +27,13 @@ const questionReducer = (state = initialState, action) => {
         case REMOVE_QUESTIONS:         
             return {
                 ...state,
-                usersQuestions: [...state.usersQuestions.filter( item => item != action.payload) ],
-                usersTaskToDo: [...state.usersTaskToDo.filter( item => item != action.payload) ]
+                usersQuestions: [...state.usersQuestions.filter( item => item !== action.payload) ],
+                usersTaskToDo: [...state.usersTaskToDo.filter( item => item !== action.payload) ]
             }
         case DONE_TASK:
             return {
                 ...state,
-                usersTaskToDo: [...state.usersTaskToDo.filter( item => item != action.payload) ]
+                usersTaskToDo: [...state.usersTaskToDo.filter( item => item !== action.payload) ]
             }
         case LOADING_ON:
             return {

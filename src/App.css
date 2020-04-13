@@ -83,6 +83,11 @@ h1 {
   color: gray;  
 }
 
+.question_type a {
+  text-decoration: none; 
+  color: #000;
+}
+
 .question_type strong:hover {
   text-decoration: underline;  
 }
