@@ -9,8 +9,9 @@ const ADD_QUESTIONS = 'ADD_QUESTION',
     FETCH_TASKS = 'FETCH_TASKS'
 
 const initialState = {
-    allQuestions: [],
+    allQuestions: null,
     usersQuestions: [],
+    restQuestions: [],
     usersTaskToDo: [],
     isLoading: false
 }
@@ -19,15 +20,19 @@ const questionReducer = (state = initialState, action) => {
 
     switch (action.type) {
         case ADD_QUESTIONS:
-            return {
+            
+        
+        return {
                 ...state,
                 usersQuestions: [...state.usersQuestions, action.payload],
+                restQuestions: [...state.restQuestions.filter( item => item !== action.payload) ],
                 usersTaskToDo: [...state.usersTaskToDo, action.payload]
             }
         case REMOVE_QUESTIONS:         
             return {
                 ...state,
                 usersQuestions: [...state.usersQuestions.filter( item => item !== action.payload) ],
+                restQuestions: [...state.restQuestions, action.payload],
                 usersTaskToDo: [...state.usersTaskToDo.filter( item => item !== action.payload) ]
             }
         case DONE_TASK:
@@ -65,7 +70,7 @@ const questionReducer = (state = initialState, action) => {
                 ...state,
                 usersQuestions: action.usersQuestions,
                 allQuestions: action.allQuestions,
-                // restQuestions: action.restQuestions
+                restQuestions: action.restQuestions
             }
         
         default:

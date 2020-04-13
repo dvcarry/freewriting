@@ -90,7 +90,7 @@ class Paper extends React.Component {
                 <div className="paper_text">
 
                     <textarea
-                        autoFocus="true"
+                        autoFocus={true}
                         rows='35'
                         value={this.props.currentAnswer.text}
                         onChange={this.addCurrent}

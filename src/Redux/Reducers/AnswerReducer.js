@@ -51,7 +51,7 @@ const answerReducer = (state = initialState, action) => {
                 currentAnswer: {}
             }
         case EDIT_ANSWER:
-            const newAnswers = { ...state.usersAnswers }
+            const newAnswers = [...state.usersAnswers]
             newAnswers[state.currentAnswer.currentIndex].text = state.currentAnswer.text
             return {
                 ...state,

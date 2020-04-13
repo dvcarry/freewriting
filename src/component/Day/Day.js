@@ -13,8 +13,6 @@ import Loader from '../UI/Loader';
 class Day extends React.Component {
 
     // const questionsTypesArr = questionTypes.map(item => item.id)
-
-
     componentDidMount() {
         this.props.resetCurrentAnswer()
         this.props.fetchDayTasks(today)
@@ -49,12 +47,13 @@ class Day extends React.Component {
                     {
                         this.props.usersTaskToDo.map(item => <Task
                             name={item.title}
-                            key={item.id}
+                            key={item.type}
                             id={item.type}
                             date={today}
                             done={false}
-                            description={item.description}
-                            add={() => this.props.addQuestion(item.id)} />)
+                            // description={item.description}
+                            // add={() => this.props.addQuestion(item.id)} 
+                            />)
                     }
                 </div>
              
@@ -66,9 +65,10 @@ class Day extends React.Component {
                             id={item.type}
                             date={today}
                             done={true}
-                            description={item.description}
+                            // description={item.description}
                             length={item.length}
-                            add={() => this.props.addQuestion(item.id)} />)
+                            // add={() => this.props.addQuestion(item.id)} 
+                            />)
                     }
                 </div>
     

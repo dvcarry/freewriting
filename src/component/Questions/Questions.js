@@ -1,5 +1,4 @@
 import React from 'react';
-import { questionTypes } from './../../Data/questionType'
 import QuestionType from './Question';
 import { connect } from 'react-redux'
 import { addQuestion, removeQuestion } from './../../Redux/Reducers/QuestionReducer'
@@ -8,8 +7,14 @@ import { fetchQuestions, fetchAddQuestion, fetchUserQuestions, fetchRemoveQuesti
 class Questions extends React.Component {
 
     componentDidMount() {
-        this.props.fetchQuestions()
-        console.log('didMount')
+
+        if (!this.props.allQuestions) {
+            this.props.fetchQuestions()
+            console.log('didMount')
+        }
+
+
+
         // this.props.fetchUserQuestions()
     }
 
@@ -19,129 +24,101 @@ class Questions extends React.Component {
     // }    
 
     shouldComponentUpdate(nextProps, nextState) {
-        if (nextProps.usersQuestions != this.props.usersQuestions && nextProps.allQuestions != this.props.allQuestions) {
-            console.log('true')
-        } else {
-            console.log('false')
-        }
-        
-        return true
+        // if (nextProps.usersQuestions != this.props.usersQuestions || nextProps.allQuestions != this.props.allQuestions) {
+        //     console.log('true')
+        // } else {
+        //     console.log('false')
+        // }
+
+        return nextProps.usersQuestions != this.props.usersQuestions || nextProps.allQuestions != this.props.allQuestions
+
+        // return true
         // nextProps.usersQuestions != this.props.usersQuestions
     }
 
 
     render() {
-        console.log('render')
-        // const questionsTypesArr = questionTypes.map(item => item.id)
 
-        // const usersQuestions = this.props.usersQuestions.map(item => {
-        //     let i = questionsTypesArr.indexOf(item, 0)
-        //     return {
-        //         id: item,
-        //         title: questionTypes[i].title,
-        //         description: questionTypes[i].description
-        //     }
-        // })
+        const allQuestions = this.props.allQuestions
+        const restQuestions = this.props.restQuestions
+        const usersQuestions = this.props.usersQuestions
 
-        // const typeForAdd = questionTypes.filter(item => !this.props.usersQuestions.includes(item.id))
+        let questions = null
 
-        let queRest =[]
-        let myRest =[]
+        if (this.props.allQuestions) {
+            questions = (
+                <>
+                    <div>
+                        {
+                            usersQuestions.map(id => <QuestionType
+                                title={allQuestions[id].title}
+                                key={allQuestions[id].id}
+                                done={false}
+                                type={allQuestions[id].id}
+                                description={allQuestions[id].desc}
+                                button={'Удалить'}
+                                click={() => this.props.fetchRemoveQuestion(allQuestions[id].id, this.props.usersQuestions)}
+                            />)
+                        }
+                    </div>
 
-        this.props.allQuestions.map( item => {
-            if (this.props.usersQuestions.includes(item.id)) {
-                myRest.push({
-                    id: item.id,
-                    title: item.title,
-                    desc: item.desc
-                })
-            } else {
-                queRest.push({
-                    id: item.id,
-                    title: item.title,
-                    desc: item.desc
-                })
-            }
-        })
+                    <div>
+                        {
+                            restQuestions.map(id => <QuestionType
+                                title={allQuestions[id].title}
+                                key={allQuestions[id].id}
+                                type={allQuestions[id].id}
+                                done={true}
+                                description={allQuestions[id].desc}
+                                button={'Добавить'}
+                                click={() => this.props.fetchAddQuestion(allQuestions[id].id, this.props.usersQuestions)}
+                            />)
+                        }
+                    </div>
+                </>
+            )
+        }
+
 
 
         return (
             <>
-                {/* <div>
-                    <div className='heading'>
-                        <h1>Мои активности</h1>
-                    </div>
-
-                    {
-                        usersQuestions.map(item => <QuestionType
-                            name={item.title}
-                            key={item.id}
-                            description={item.description}
-                            type={'Убрать'}
-                            done={false}
-                            click={() => this.props.removeQuestion(item.id)}
-                        />)
-                    }
-                </div> */}
-
-
-
-
-                {/* <h2>Добавить</h2>
-                <hr></hr>
-                <div>
-                    {
-                        typeForAdd.map(item => <QuestionType 
-                            name={item.title} 
-                            key={item.id} 
-                            description={item.description}
-                            done={true}
-                            type={'Добавить'}                        
-                            click={() => this.props.addQuestion(item.id)} />)
-                    }
-                </div> */}
-
-                {/* <hr></hr> */}
-
-
                 <div className='heading'>
                     <h1>Мои дневники на каждый день</h1>
                 </div>
 
-                <div>
+                {questions}
+
+                {/* <div>
                     {
-                        myRest.map(item => <QuestionType
-                            title={item.title}
-                            key={item.id}
+                        usersQuestions.map(id => <QuestionType
+                            title={allQuestions[id].title}
+                            key={allQuestions[id].id}
                             done={false}
-                            type={item.id}
-                            description={item.desc}
+                            type={allQuestions[id].id}
+                            description={allQuestions[id].desc}
                             button={'Удалить'}
-                            click={() => this.props.fetchRemoveQuestion(item.id, this.props.usersQuestions)}
+                            click={() => this.props.fetchRemoveQuestion(allQuestions[id].id, this.props.usersQuestions)}
                         />)
                     }
                 </div>
-
-
 
                 <div>
                     {
-                        queRest.map(item => <QuestionType
-                            title={item.title}
-                            key={item.id}
-                            type={item.id}
+                        restQuestions.map(id => <QuestionType
+                            title={allQuestions[id].title}
+                            key={allQuestions[id].id}
+                            type={allQuestions[id].id}
                             done={true}
-                            description={item.desc}
+                            description={allQuestions[id].desc}
                             button={'Добавить'}
-                            click={() => this.props.fetchAddQuestion(item.id, this.props.usersQuestions)}
+                            click={() => this.props.fetchAddQuestion(allQuestions[id].id, this.props.usersQuestions)}
                         />)
                     }
-                </div>
+                </div> */}
             </>
         )
     }
-
-
 }
 
 const mapStateToProps = state => {

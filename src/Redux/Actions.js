@@ -5,34 +5,35 @@ import { setDoneTasks } from './Reducers/AnswerReducer';
 
 Axios.defaults.baseURL = 'https://free-ad202.firebaseio.com/';
 
-export function fetchQuestions() {
-    return async dispatch => {
+export function fetchQuestions() {       
+    
+    return async (dispatch, getState) => {
         console.log('dispatch questoiins')
         // dispatch(loadingOn)
 
+        // const { questions } = getState()
+        // const { allQuestions } = questions
+
+        // console.log('try', allQuestions)
+
+        // if (allQuestions.length > 0) {
+        //     return
+        // }
+
+
         try {
-            let allQuestions = await Axios.get('questionTypes.json')
-            allQuestions = Object.values(allQuestions.data)
+            const {data: allQuestionsData} = await Axios.get('questionTypes.json')
+            const allQuestions = Object.values(allQuestionsData)
 
-            const allQuestionsArr = allQuestions.map(item => item.id)
+            const allQuestionsIds = allQuestions.map(item => item.id)
 
-            let myQuestions = await Axios.get('users/kirill/questions/.json')
-            if (myQuestions.data) {
-                myQuestions = Object.values(myQuestions.data)
-            } else { myQuestions = [] }
+            const dataMyQuestions = await Axios.get('users/kirill/questions.json')         
+            const myQuestions = Object.values(dataMyQuestions.data) || []
 
-            let myQuestionsArr = []
-            let restQuestionArr = []
+            const myQuestionsArr = allQuestionsIds.filter(type => myQuestions.includes(type))
+            const restQuestionArr = allQuestionsIds.filter(type => !(myQuestions.includes(type)))
 
-            allQuestionsArr.map(item => {
-                if (myQuestions.includes(item)) {
-                    myQuestionsArr.push(item)
-                } else {
-                    restQuestionArr.push(item)
-                }
-            })
-
-            dispatch(actionFetchQuestions(allQuestions, myQuestionsArr))
+            dispatch(actionFetchQuestions(allQuestionsData, myQuestionsArr, restQuestionArr))
 
         } catch (e) {
             console.log(e)
@@ -45,10 +46,10 @@ export function fetchAddQuestion(item, array) {
 
         // dispatch(loadingOn)        
         // debugger
-        console.log(item)
+        // console.log(item)
 
         const newArr = [...array, item]
-        console.log(newArr)
+        // console.log(newArr)
 
         // const response = await Axios.get('questionTypes.json')            
         // const allQuestionsArr = Object.values(response.data).map( i => {            
@@ -133,16 +134,7 @@ export function fetchDayTasks() {
                         })
                     }
                 })
-            }
-            
-
-            // myQuestions = myQuestions.map(item => {
-            //     return {
-            //         id: `${date} ${item}`,
-            //         type: item
-            //     }
-            // })
-
+            }          
 
 
             dispatch(loadingOff)

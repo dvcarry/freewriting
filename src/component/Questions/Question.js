@@ -8,15 +8,12 @@ const QuestionType = props => {
     return (
         <div className={classes.join(' ')} >
             <div>
-                <strong><NavLink to={`/questions/${props.type}`}>{props.title}</NavLink></strong>
-                
+                <strong><NavLink to={`/questions/${props.type}`}>{props.title}</NavLink></strong>                
                 <p>{props.description}</p>
             </div>
             <div className="question_right">
                 <button onClick={props.click}>{props.button}</button>
             </div>
-
-
         </div>
     )
 }
