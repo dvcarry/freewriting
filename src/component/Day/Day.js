@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { today } from './../../Data/dates'
 // import { render } from '@testing-library/react';
 import { resetCurrentAnswer } from './../../Redux/Reducers/AnswerReducer'
-import { fetchDayTasks } from './../../Redux/Actions'
+import { fetchDayTasks, fetchQuestionsCatalog } from './../../Redux/Actions'
 import { NavLink } from 'react-router-dom';
 import Loader from '../UI/Loader';
 
@@ -16,11 +16,32 @@ class Day extends React.Component {
     componentDidMount() {
         this.props.resetCurrentAnswer()
         this.props.fetchDayTasks(today)
+        
+        if (this.props.questionsCatalog === null) {
+            this.props.fetchQuestionsCatalog()
+        }
+        
     }
 
     
     
     render() {
+
+        let commonLength, commonTimer
+        if (this.props.usersAnswers.length > 0) {
+            commonLength = this.props.usersAnswers.reduce((sum, number) => sum + number.length, 0)
+            commonTimer = this.props.usersAnswers.reduce((sum, number) => sum + number.timer, 0)
+        }
+        
+        
+        // {
+        //     // let sum = 0
+        //     // sum += number.length
+        //     return sum + number.length
+        // })
+
+        console.log('ddffd', commonLength, commonTimer)
+
 
         return (
             <>
@@ -50,7 +71,7 @@ class Day extends React.Component {
                             key={item.type}
                             id={item.type}
                             date={today}
-                            done={false}
+                            done={false}                        
                             // description={item.description}
                             // add={() => this.props.addQuestion(item.id)} 
                             />)
@@ -67,9 +88,14 @@ class Day extends React.Component {
                             done={true}
                             // description={item.description}
                             length={item.length}
+                            timer={item.timer}
                             // add={() => this.props.addQuestion(item.id)} 
                             />)
                     }
+                </div>
+
+                <div>
+                    Сегодня ты уделил фрирайтингу {commonTimer} минут своей жизни и написал {commonLength} символов.
                 </div>
     
             </>
@@ -85,8 +111,9 @@ const mapStateToProps = state => {
         usersAnswers: state.answers.usersAnswers,
         userToday: state.answers.userTodayTasks,
         usersTaskToDo: state.questions.usersTaskToDo,
-        isLoading: state.questions.isLoading
+        isLoading: state.questions.isLoading,
+        questionsCatalog: state.questions.allQuestions
     }
 }
 
-export default connect(mapStateToProps, { resetCurrentAnswer, fetchDayTasks })(Day)
+export default connect(mapStateToProps, { resetCurrentAnswer, fetchDayTasks, fetchQuestionsCatalog })(Day)

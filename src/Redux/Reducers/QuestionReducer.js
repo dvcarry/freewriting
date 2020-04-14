@@ -20,51 +20,57 @@ const questionReducer = (state = initialState, action) => {
 
     switch (action.type) {
         case ADD_QUESTIONS:
-            
-        
-        return {
-                ...state,
-                usersQuestions: [...state.usersQuestions, action.payload],
-                restQuestions: [...state.restQuestions.filter( item => item !== action.payload) ],
-                usersTaskToDo: [...state.usersTaskToDo, action.payload]
-            }
-        case REMOVE_QUESTIONS:         
             return {
                 ...state,
-                usersQuestions: [...state.usersQuestions.filter( item => item !== action.payload) ],
-                restQuestions: [...state.restQuestions, action.payload],
-                usersTaskToDo: [...state.usersTaskToDo.filter( item => item !== action.payload) ]
+                usersQuestions: [...state.usersQuestions, action.payload],
+                restQuestions: [...state.restQuestions.filter(item => item !== action.payload)],
+                usersTaskToDo: [...state.usersTaskToDo, action.payload]
             }
+
+        case REMOVE_QUESTIONS:
+            return {
+                ...state,
+                usersQuestions: [...state.usersQuestions.filter(item => item !== action.payload)],
+                restQuestions: [...state.restQuestions, action.payload],
+                usersTaskToDo: [...state.usersTaskToDo.filter(item => item !== action.payload)]
+            }
+
         case DONE_TASK:
             return {
                 ...state,
-                usersTaskToDo: [...state.usersTaskToDo.filter( item => item !== action.payload) ]
+                usersTaskToDo: [...state.usersTaskToDo.filter(item => item !== action.payload)]
             }
+
         case LOADING_ON:
             return {
                 ...state,
                 isLoading: true
             }
+
         case LOADING_OFF:
             return {
                 ...state,
                 isLoading: false
             }
+
         case FETCH_ALL_QUESTIONS:
             return {
                 ...state,
                 allQuestions: action.payload
             }
+
         case FETCH_USER_QUESTIONS:
             return {
                 ...state,
                 usersQuestions: action.payload
             }
+
         case FETCH_TASKS:
             return {
                 ...state,
                 usersTaskToDo: action.payload
             }
+            
         case FETCH_QUESTIONS:
             return {
                 ...state,
@@ -72,7 +78,7 @@ const questionReducer = (state = initialState, action) => {
                 allQuestions: action.allQuestions,
                 restQuestions: action.restQuestions
             }
-        
+
         default:
             return state
     }
@@ -135,8 +141,8 @@ export const fetchTasks = payload => {
 
 
 
-export const loadingOff = {type: LOADING_OFF}
-export const loadingOn = {type: LOADING_ON}
+export const loadingOff = { type: LOADING_OFF }
+export const loadingOn = { type: LOADING_ON }
 
 
 

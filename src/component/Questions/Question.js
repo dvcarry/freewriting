@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
-const QuestionType = props => {
+const Question = props => {
 
     const classes = ['question_type', 'card', props.done ? 'done' : 'notdone']
 
@@ -18,4 +18,4 @@ const QuestionType = props => {
     )
 }
 
-export default QuestionType
+export default Question

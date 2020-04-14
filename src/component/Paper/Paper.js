@@ -1,29 +1,28 @@
 import React from 'react';
 import { connect } from 'react-redux'
-// import PaperHeading from './PaperHeading';
-// import PaperText from './PaperText';
-// import PaperPanel from './PaperPanel';
 import { withRouter } from 'react-router-dom';
 import { questionTypesIdArray, questionTypes } from './../../Data/questionType'
-import { addAnswer, addCurrentAnswer, editAnswer } from '../../Redux/Reducers/AnswerReducer'
+import { addAnswer, addCurrentAnswer, editAnswer, setCurrentAnswer } from '../../Redux/Reducers/AnswerReducer'
 import { doneTask } from '../../Redux/Reducers/QuestionReducer'
 import { fetchAddAnswer } from './../../Redux/Actions'
 import { today } from './../../Data/dates'
+import Timer from './Timer';
 
 class Paper extends React.Component {
 
     clickReady = () => {
-
         
-        if (this.props.currentAnswer.status === 'old') {
-            this.props.editAnswer()
-        } else {            
-            
-            this.props.fetchAddAnswer(this.props.match.params.date, this.props.match.params.type, this.props.currentAnswer)
-            this.props.addAnswer()
-            this.props.doneTask(this.props.match.params.type)               
-        }
 
+        this.props.fetchAddAnswer(this.props.match.params.date, this.props.match.params.type, this.props.currentAnswer)
+
+        // if (this.props.currentAnswer.status === 'old') {
+        //     this.props.editAnswer()
+        // } else {            
+        //     debugger
+        //     this.props.fetchAddAnswer(this.props.match.params.date, this.props.match.params.type, this.props.currentAnswer)
+        //     this.props.addAnswer()
+        //     this.props.doneTask(this.props.match.params.type)               
+        // }
         
         this.props.history.push('/tasks/' + today)     
     }
@@ -31,12 +30,12 @@ class Paper extends React.Component {
     addCurrent = event => {
 
         this.props.addCurrentAnswer({
-            date: this.props.match.params.date,
-            type: this.props.match.params.type,
-            title: questionTypes[questionTypesIdArray.indexOf(this.props.match.params.type)].title,
+            // date: this.props.match.params.date,
+            // type: this.props.match.params.type,
+            // title: questionTypes[questionTypesIdArray.indexOf(this.props.match.params.type)].title,
             text: event.target.value,
             length: event.target.value.length,
-            id: this.props.match.params.date + ' ' + this.props.match.params.type
+            // id: this.props.match.params.date + ' ' + this.props.match.params.type
         })
     }
 
@@ -47,26 +46,30 @@ class Paper extends React.Component {
 
     componentDidMount() {
 
-        const current = this.props.answers.find(item => item.id === `${this.props.match.params.date} ${this.props.match.params.type}`)        
-
-        if (current) {
-            this.props.addCurrentAnswer({
-                date: current.date,
-                type: current.type,
-                title: current.title,
-                text: current.text,
-                length: current.length,
+        const currentOldAnswer = this.props.answers.find(item => item.id === `${this.props.match.params.date} ${this.props.match.params.type}`)      
+         
+        if (currentOldAnswer) {
+            this.props.setCurrentAnswer({
+                date: currentOldAnswer.date,
+                type: currentOldAnswer.type,
+                title: currentOldAnswer.title,
+                text: currentOldAnswer.text,
+                length: currentOldAnswer.length,
                 status: 'old',
-                currentIndex: this.props.answers.indexOf(current)
+                id: currentOldAnswer.date + ' ' + currentOldAnswer.type,
+                timer: currentOldAnswer.timer
+                // currentIndex: this.props.answers.indexOf(currentOldAnswer)
             })
         } else {
-            this.props.addCurrentAnswer({
+            this.props.setCurrentAnswer({
                 date: this.props.match.params.date,
                 type: this.props.match.params.type,
-                title: questionTypes[questionTypesIdArray.indexOf(this.props.match.params.type)].title,
+                title: this.props.questionsCatalog[this.props.match.params.type].title,
                 text: '',
                 length: 0,
-                status: 'new'
+                status: 'new',
+                id: this.props.match.params.date + ' ' + this.props.match.params.type,
+                timer: 0
             })
         }
     }
@@ -104,8 +107,9 @@ class Paper extends React.Component {
                         ? <button onClick={this.clickReady}>Готово</button>
                         : <button onClick={this.skipQuestion}>Пропустить</button>}
                     </div>
-                    <div>
-                        <span>{this.props.currentAnswer.length}</span>
+                    <div className="paper_panel_numbers">
+                        <span>{this.props.currentAnswer.length} сим.</span>
+                        <Timer />
                     </div>
                 </div>
             </div>
@@ -118,8 +122,9 @@ const mapStateToProps = state => {
     return {
         answers: state.answers.usersAnswers,
         usersTaskToDo: state.questions.usersTaskToDo,
-        currentAnswer: state.answers.currentAnswer
+        currentAnswer: state.answers.currentAnswer,
+        questionsCatalog: state.questions.allQuestions
     }
 }
 
-export default connect(mapStateToProps, { addAnswer, doneTask, addCurrentAnswer, editAnswer, fetchAddAnswer })(withRouter(Paper))
+export default connect(mapStateToProps, { addAnswer, doneTask, addCurrentAnswer, editAnswer, fetchAddAnswer, setCurrentAnswer })(withRouter(Paper))

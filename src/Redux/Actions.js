@@ -5,11 +5,30 @@ import { setDoneTasks } from './Reducers/AnswerReducer';
 
 Axios.defaults.baseURL = 'https://free-ad202.firebaseio.com/';
 
+
+export function fetchQuestionsCatalog() {       
+    
+    return async dispatch => {
+        dispatch(loadingOn)
+        try {
+            const {data: allQuestionsData} = await Axios.get('questionTypes.json')
+            // const allQuestions = Object.values(allQuestionsData)
+
+            dispatch(fetchAllQuestions(allQuestionsData))
+            dispatch(loadingOff)
+
+        } catch (e) {
+            console.log(e)
+        }
+    }
+}
+
+
 export function fetchQuestions() {       
     
     return async (dispatch, getState) => {
         console.log('dispatch questoiins')
-        // dispatch(loadingOn)
+        
 
         // const { questions } = getState()
         // const { allQuestions } = questions
@@ -20,6 +39,7 @@ export function fetchQuestions() {
         //     return
         // }
 
+        dispatch(loadingOn)
 
         try {
             const {data: allQuestionsData} = await Axios.get('questionTypes.json')
@@ -34,10 +54,12 @@ export function fetchQuestions() {
             const restQuestionArr = allQuestionsIds.filter(type => !(myQuestions.includes(type)))
 
             dispatch(actionFetchQuestions(allQuestionsData, myQuestionsArr, restQuestionArr))
+            
 
         } catch (e) {
             console.log(e)
         }
+        dispatch(loadingOff)
     }
 }
 
@@ -85,12 +107,11 @@ export function fetchRemoveQuestion(item, array) {
 }
 
 export function fetchAddAnswer(date, type, data) {
-    return dispatch => {
+    return async dispatch => {      
 
-        console.log('fetch')
 
         try {
-            Axios.put('users/kirill/answers/' + date + '/' + type + '.json', data)
+            await Axios.put('users/kirill/answers/' + date + '/' + type + '.json', data)
 
         } catch (e) {
             console.log(e)

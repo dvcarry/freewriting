@@ -113,10 +113,16 @@ h1 {
   position: fixed;
   top: 0;
   left: 0;
+  justify-content: space-between;
+}
+
+.menu_left {
+  display: flex;
 }
 
 .menu ul {
   list-style: none;
+  display: inline-block;
 }
 
 .menu ul li {
@@ -135,6 +141,11 @@ h1 {
 
 .logo {
   margin: 0 30px;
+}
+
+.logo a {
+  text-decoration: none;
+  color: black;
 }
 
 
@@ -159,6 +170,12 @@ h1 {
 
 .done {
   background-color: transparent;
+}
+
+.task_kpi span {
+  color: gray;
+  margin-left: 20px;
+  font-size: 10px;
 }
 
 /*----------------------- QUESTION ------------------------------ */
@@ -200,4 +217,21 @@ button {
 
 .paper_panel span {
   color: gray;
+  margin-left: 20px;
+  font-size: 10px;
+}
+
+/*----------------------- AUTH ------------------------------ */
+
+.auth label {
+  display: block;
+}
+
+.auth input {
+  width: 250px;
+  padding: 5px 15px;
+}
+
+.auth_block {
+  margin-bottom: 10px;
 }
